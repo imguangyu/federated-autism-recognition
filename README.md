@@ -2,6 +2,8 @@
 
 Official code for **Unlocking Multi-Site Clinical Data: A Federated Learning Approach to Privacy-First Child Autism Behavior Analysis** ([OpenReview](https://openreview.net/forum?id=JWz1elTyeq)).
 
+[Guangyu Sun](https://openreview.net/profile?id=~Guangyu_Sun3), Wenhan Wu, Zhishuai Guo, Ziteng Wang, Pegah Khosravi, Chen Chen
+
 Skeleton-based action recognition on **MMASD+** using [FreqMixFormer](https://github.com/wenhanwu95/FreqMixFormer), with **local** and **federated** training across theme-based clients.
 
 ## Setup
@@ -72,10 +74,9 @@ streamlit run fl_experiments/streamlit_fl_methods_vis.py
 If you use this code or our federated learning framework, please cite:
 
 ```bibtex
-@inproceedings{
-anonymous2026unlocking,
+@inproceedings{sun2026unlocking,
 title={Unlocking Multi-Site Clinical Data: A Federated Learning Approach to Privacy-First Child Autism Behavior Analysis},
-author={Anonymous},
+author={Guangyu Sun and Wenhan Wu and Zhishuai Guo and Ziteng Wang and Pegah Khosravi and Chen Chen},
 booktitle={CVPR 2026 Workshop on Computer Vision for Children -- Proceeding Track},
 year={2026},
 url={https://openreview.net/forum?id=JWz1elTyeq}
