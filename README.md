@@ -78,6 +78,15 @@ Put downloaded data into the following directory structure:
 ### Ensemble
 + Find the training commends in ensemble.sh
 
+## MMASD+ and federated learning (this fork)
+
+This repository extends FreqMixFormer with **MMASD+** (autism-related skeletal action recognition) and **federated learning** experiments across theme-based clients.
+
+- **Data**: see `data/MMASD+/README.md` for themes, conversion scripts, and how to build `MMASD+_theme*.npz` (large `.npz` files are gitignored; generate locally).
+- **Local per-theme training**: `bash run_mmasd_themes.sh` or `bash fl_experiments/run_local_mmasd_baseline.sh`
+- **FL (NVFLARE)**: see `fl_experiments/README.md` for FedAvg, FedProx, FedBN, FedPer, APFL, etc.
+- **Monitoring**: `streamlit run streamlit_mmasd_vis.py` for local training curves; `streamlit run fl_experiments/streamlit_fl_methods_vis.py` for FL runs.
+
 ## Citation
 If you find this code useful for your research, please consider citing the following paper:
 

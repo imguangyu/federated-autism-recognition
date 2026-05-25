@@ -1,0 +1,14 @@
+# FreqMixFormer + MMASD+ scripts
+# Install after creating conda env and installing PyTorch (see setup_env.sh or environment.yml).
+
+tensorboard>=2.0
+tensorboardX>=2.0
+tqdm
+scikit-learn
+h5py
+torchpack
+matplotlib
+imageio
+streamlit
+plotly
+pandas

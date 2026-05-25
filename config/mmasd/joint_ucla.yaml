@@ -1,0 +1,42 @@
+# MMASD+ in NW-UCLA format (20 joints, 1 person). Run mmasd_to_ucla_format.py first.
+feeder: feeders.feeder_mmasd.Feeder
+train_feeder_args:
+  data_path: data/MMASD+
+  label_path: train
+  debug: False
+  random_choose: True
+  random_shift: False
+  random_move: False
+  window_size: 52
+  normalization: False
+  repeat: 15
+  time_steps: 52
+
+test_feeder_args:
+  data_path: data/MMASD+
+  label_path: val
+  debug: False
+  time_steps: 52
+
+# model: same as UCLA (20 nodes, 1 person)
+model: model.skefreqmixformer.Model
+model_args:
+  num_class: 11
+  num_point: 20
+  num_person: 1
+  graph: graph.ucla.Graph
+  graph_args:
+    labeling_mode: 'spatial'
+
+# optim
+weight_decay: 0.0006
+base_lr: 0.2
+step: [50]
+warm_up_epoch: 5
+
+# training
+device: [0]
+batch_size: 64
+test_batch_size: 64
+num_epoch: 70
+nesterov: True

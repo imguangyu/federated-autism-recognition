@@ -1,13 +1,20 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import os
+import sys
+
+# Prefer the project's local torchlight (has DictAction) over any pip-installed torchlight
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_torchlight_parent = os.path.join(_script_dir, 'torchlight')
+if os.path.isdir(_torchlight_parent) and _torchlight_parent not in sys.path:
+    sys.path.insert(0, _torchlight_parent)
+
 import argparse
 import inspect
-import os
 import pickle
 import random
 import shutil
-import sys
 import time
 from collections import OrderedDict
 import traceback

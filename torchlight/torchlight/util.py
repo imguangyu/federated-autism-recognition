@@ -13,7 +13,10 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
-from torchpack.runner.hooks import PaviLogger
+try:
+    from torchpack.runner.hooks import PaviLogger
+except (ImportError, ModuleNotFoundError):
+    PaviLogger = None  # optional: pavi logging disabled if torchpack not installed
 
 
 class IO():
@@ -29,6 +32,8 @@ class IO():
 
     def log(self, *args, **kwargs):
         try:
+            if PaviLogger is None:
+                return
             if self.pavi_logger is None:
                 url = 'http://pavi.parrotsdnn.org/log'
                 with open(self.session_file, 'r') as f:

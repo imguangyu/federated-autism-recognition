@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Training / experiment outputs
+work_dir/
+*.pt
+*.pth
+*.ckpt
+runs/
+events.out.tfevents.*
+tensorboard/
+
+# FL experiment artifacts
+fl_experiments/workspaces/
+fl_experiments/logs/
+fl_experiments/**/__pycache__/
+
+# Large datasets (generate with scripts in data/MMASD+/)
+*.npz
+*.h5
+*.hdf5
+
+# MMASD+ converted skeleton JSON (regenerate via mmasd_to_ucla_format.py)
+data/MMASD+/all_sqe/
+data/MMASD+/theme*/all_sqe/
+
+# Raw / external datasets (download separately; see README)
+data/nturgbd_raw/
+data/ntu/**/*.npy
+data/ntu120/**/*.npy
+data/NW-UCLA/all_sqe/
+
+# Large generated media (keep small PNGs for docs)
+data/MMASD+/*.gif
+data/MMASD+/skeleton_motion.gif
+
+# Pickles / scores (regenerated at eval)
+**/epoch*_score.pkl
+**/wrong_*.txt
+
+# Logs
+*.log
+!fl_experiments/**/*.md
+
+# Secrets / local env
+.env
+.env.*
+*.pem
+
+# Streamlit cache
+.streamlit/

@@ -1,0 +1,29 @@
+# FreqMixFormer conda environment
+# Option A - One command (PyTorch from pip, CPU by default):
+#   conda env create -f environment.yml
+#   conda activate freqmixformer
+#   For CUDA 11.8: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+#
+# Option B - Use setup_env.sh for env + PyTorch CUDA in one go:
+#   bash setup_env.sh      # CUDA 11.8
+#   bash setup_env.sh cpu  # CPU only
+
+name: freqmixformer
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pyyaml
+  - pip
+  - pip:
+    - torch
+    - torchvision
+    - tensorboardX>=2.0
+    - tqdm
+    - scikit-learn
+    - h5py
+    - torchpack
+    - matplotlib
+    - imageio

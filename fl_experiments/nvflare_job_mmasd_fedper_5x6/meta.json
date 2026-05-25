@@ -1,0 +1,21 @@
+{
+  "name": "nvflare_job_mmasd_fedper_5x6",
+  "min_clients": 3,
+  "resource_spec": {
+    "server": {},
+    "theme1": {},
+    "theme2": {},
+    "theme3": {}
+  },
+  "deploy_map": {
+    "server_app": [
+      "server"
+    ],
+    "client_app": [
+      "theme1",
+      "theme2",
+      "theme3"
+    ]
+  }
+}
+
