@@ -1,5 +1,7 @@
 # Federated Autism Recognition
 
+Official code for **Unlocking Multi-Site Clinical Data: A Federated Learning Approach to Privacy-First Child Autism Behavior Analysis** ([OpenReview](https://openreview.net/forum?id=JWz1elTyeq)).
+
 Skeleton-based action recognition on **MMASD+** using [FreqMixFormer](https://github.com/wenhanwu95/FreqMixFormer), with **local** and **federated** training across theme-based clients.
 
 ## Setup
@@ -67,17 +69,19 @@ streamlit run fl_experiments/streamlit_fl_methods_vis.py
 
 ## Citation
 
-If you use the underlying FreqMixFormer model, cite:
+If you use this code or our federated learning framework, please cite:
 
 ```bibtex
-@inproceedings{wu2024frequencyguidancemattersskeletal,
-  author = {Wenhan Wu and Ce Zheng and Zihao Yang and Chen Chen and Srijan Das and Aidong Lu},
-  title = {Frequency Guidance Matters: Skeletal Action Recognition by Frequency-Aware Mixed Transformer},
-  booktitle = {ACM Multimedia 2024},
-  year = {2024}
+@inproceedings{
+anonymous2026unlocking,
+title={Unlocking Multi-Site Clinical Data: A Federated Learning Approach to Privacy-First Child Autism Behavior Analysis},
+author={Anonymous},
+booktitle={CVPR 2026 Workshop on Computer Vision for Children -- Proceeding Track},
+year={2026},
+url={https://openreview.net/forum?id=JWz1elTyeq}
 }
 ```
 
 ## Acknowledgements
 
-Built on [FreqMixFormer](https://github.com/wenhanwu95/FreqMixFormer), [Skeleton-MixFormer](https://github.com/ElricXin/Skeleton-MixFormer), and [CTR-GCN](https://github.com/Uason-Chen/CTR-GCN) data tooling.
+Backbone model and data tooling from [FreqMixFormer](https://github.com/wenhanwu95/FreqMixFormer) (ACM MM 2024), [Skeleton-MixFormer](https://github.com/ElricXin/Skeleton-MixFormer), and [CTR-GCN](https://github.com/Uason-Chen/CTR-GCN).
