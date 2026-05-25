@@ -1,97 +1,75 @@
-# Frequency Guidance Matters: Skeletal Action Recognition by Frequency-Aware Mixed Transformer [ACM MM 2024]
-[Wenhan Wu](https://sites.google.com/view/wenhanwu/%E9%A6%96%E9%A1%B5), [Ce Zheng](https://zczcwh.github.io/), [Zihao Yang](https://openreview.net/profile?id=~Zihao_Yang7), [Srijan Das](https://srijandas07.github.io/), [Chen Chen](https://www.crcv.ucf.edu/chenchen/), [Aidong Lu ](https://webpages.charlotte.edu/alu1/)
+# Federated Autism Recognition
 
-[![Website shields.io](https://img.shields.io/website?url=http%3A//poco.is.tue.mpg.de)](https://wenhanwu95.github.io/FreqMixFormer.github.io/)  [![arXiv](https://img.shields.io/badge/arXiv-2407.12322-00ff00.svg)](https://arxiv.org/abs/2407.12322)
+Skeleton-based action recognition on **MMASD+** using [FreqMixFormer](https://github.com/wenhanwu95/FreqMixFormer), with **local** and **federated** training across theme-based clients.
 
-## Abstract
-Recently, transformers have demonstrated great potential for modeling long-term dependencies from skeleton sequences and thereby gained ever-increasing attention in skeleton action recognition. However, the existing transformer-based approaches heavily rely on the naive attention mechanism for capturing the spatiotemporal features, which falls short in learning discriminative representations that exhibit similar motion patterns. To address this challenge, we introduce the Frequency-aware Mixed Transformer (FreqMixFormer), specifically designed for recognizing similar skeletal actions with subtle discriminative motions. First, we introduce a frequency-aware attention module to unweave skeleton frequency representations by embedding joint features into frequency attention maps, aiming to distinguish the discriminative movements based on their frequency coefficients. Subsequently, we develop a mixed transformer architecture to incorporate spatial features with frequency features to model the comprehensive frequency-spatial patterns. Additionally, a temporal transformer is proposed to extract the global correlations across frames. Extensive experiments show that FreqMiXFormer outperforms SOTA on 3 popular skeleton action recognition datasets, including NTU RGB+D, NTU RGB+D 120, and NW-UCLA datasets. 
+## Setup
 
-## Motivation
-![motivation](imgs/fig1.png)
-The overall design of our Frequency-aware Mixed Transformer. Our FreqMixFormer model overcomes the limitations of traditional transformer-based methods, which cannot effectively recognize confusing actions such as reading and writing due to the straightforward process of skeleton sequences. As highlighted with the colored boxes, the FreqMixFormer introduces the frequency domain and extracts high-frequency features, which often indicate subtle and dynamic movements (red), and low-frequency features, which are associated with slow and steady movements (blue). These features are then fused with spatial features. Our results demonstrate that the integrated frequency-spatial features significantly improve the model's capability to discern discriminative joint correlations.
+```bash
+conda env create -f environment.yml   # or: bash setup_env.sh
+conda activate freqmixformer
+pip install -r requirements.txt
+```
 
-## Our Approach
-![Approach](imgs/fig2.png)
-We propose a Frequency-aware Attention Block (FAB) to investigate frequency features within skeletal sequences. A frequency operator is specifically designed to improve the learning of frequency coefficients, thereby enhancing the ability to capture discriminative correlations among joints.
-Consequently, we introduce the Frequency-aware Mixed Transformer (FreqMixFormer) to extract frequency-spatial joint correlations. The model incorporates a temporal transformer designed to enhance its ability to capture temporal features across frames.
+For federated experiments, also install NVFLARE and TensorBoard:
 
-## Results on popular datasets
-![resuls](imgs/result.png)
+```bash
+pip install nvflare tensorboard
+```
 
-## Latest Updates:
-* We proposed a unified lightweight spatio-temporal transformer framework named UniSTFormer, which achieves a superior balance between accuracy and efficiency. The paper and codes are coming soon 2025/8/12
-* FreqMixFormerV2 (A lightweight version of FreqMixFormer) is accepted by The 19th IEEE International Conference on Automatic Face and Gesture Recognition (FG 2025) 2024/12/13
-* Codes updated 2024/11/10
-* Create the GitHub repository and project website on 2024/7/18
-* Preprint paper is available on arXiv 2024/7/18
+## MMASD+ data
 
-## Download datasets
-**NTU RGB+D 60 and 120**
+Large artifacts (`.npz`, converted JSON trees) are not in the repo. See `data/MMASD+/README.md` for themes and conversion.
 
-1. Request dataset: https://rose1.ntu.edu.sg/dataset/actionRecognition
-2. Download the skeleton-only datasets:  
-    i. ```nturgbd_skeletons_s001_to_s017.zip``` (NTU RGB+D 60)  
-    ii. ```nturgbd_skeletons_s018_to_s032.zip``` (NTU RGB+D 120)  
-    iii. Extract above files to ```./data/nturgbd_raw```  
+From the project root, build theme subsets (example):
 
-**NW-UCLA**
+```bash
+python data/MMASD+/mmasd_to_freqmixformer_npz.py --subset theme1 --out data/MMASD+/MMASD+_theme1.npz
+python data/MMASD+/mmasd_to_freqmixformer_npz.py --subset theme2 --out data/MMASD+/MMASD+_theme2.npz
+python data/MMASD+/mmasd_to_freqmixformer_npz.py --subset theme3 --out data/MMASD+/MMASD+_theme3.npz
+```
 
-1. Download dataset from [here](https://drive.google.com/file/d/1wWhgqMEQlrCKcJHu6W72Zk_iloS7_JJw/view?usp=share_link)
-2. Move ```all_sqe``` to ```./data/NW-UCLA```
+## Local training (per theme)
 
+```bash
+# Parallel on GPUs 0,1,2 (uses CUDA_VISIBLE_DEVICES)
+bash run_mmasd_themes.sh
 
-## NTU Data Processing
-### Directory Structure
+# Or timestamped baseline (recommended)
+bash fl_experiments/run_local_mmasd_baseline.sh
+```
 
-Put downloaded data into the following directory structure:
-~~~
-  - NW-UCLA/
-    - all_sqe
-      ... # raw data of NW-UCLA
-  - ntu/
-  - ntu120/
-  - nturgbd_raw/
-    - nturgb+d_skeletons/     # from `nturgbd_skeletons_s001_to_s017.zip`
-      ...
-    - nturgb+d_skeletons120/  # from `nturgbd_skeletons_s018_to_s032.zip`
-      ...
-~~~
+Configs: `config/mmasd/joint_theme{1,2,3}.yaml` (11 global action classes).
 
-### Generating Data
+Monitor:
 
-+ Generate NTU RGB+D 60 or NTU RGB+D 120 dataset:
-~~~
- cd ./data/ntu # or cd ./data/ntu120
- # Get skeleton of each performer
- python get_raw_skes_data.py
- # Remove the bad skeleton 
- python get_raw_denoised_data.py
- # Transform the skeleton to the center of the first frame
- python seq_transformation.py
-~~~
+```bash
+streamlit run streamlit_mmasd_vis.py
+```
 
-## Training & Testing
-### Training
-+ Find the training commends in train.sh 
-### Testing
-+ Find the training commends in testing.sh  
-### Ensemble
-+ Find the training commends in ensemble.sh
+## Federated learning
 
-## MMASD+ and federated learning (this fork)
+See `fl_experiments/README.md` for NVFLARE jobs (FedAvg, FedProx, FedBN, FedPer, APFL, local baseline, 5×6 splits).
 
-This repository extends FreqMixFormer with **MMASD+** (autism-related skeletal action recognition) and **federated learning** experiments across theme-based clients.
+```bash
+bash fl_experiments/run_fl_mmasd_simulator.sh --method fedavg
+streamlit run fl_experiments/streamlit_fl_methods_vis.py
+```
 
-- **Data**: see `data/MMASD+/README.md` for themes, conversion scripts, and how to build `MMASD+_theme*.npz` (large `.npz` files are gitignored; generate locally).
-- **Local per-theme training**: `bash run_mmasd_themes.sh` or `bash fl_experiments/run_local_mmasd_baseline.sh`
-- **FL (NVFLARE)**: see `fl_experiments/README.md` for FedAvg, FedProx, FedBN, FedPer, APFL, etc.
-- **Monitoring**: `streamlit run streamlit_mmasd_vis.py` for local training curves; `streamlit run fl_experiments/streamlit_fl_methods_vis.py` for FL runs.
+## Repository layout
+
+| Path | Description |
+|------|-------------|
+| `config/mmasd/` | MMASD+ / theme training configs |
+| `data/MMASD+/` | Conversion scripts, docs, split JSON |
+| `fl_experiments/` | NVFLARE jobs, run scripts, FL Streamlit |
+| `feeders/feeder_mmasd.py` | MMASD+ data loader |
+| `run_mmasd_themes.sh` | Local multi-theme training launcher |
 
 ## Citation
-If you find this code useful for your research, please consider citing the following paper:
+
+If you use the underlying FreqMixFormer model, cite:
 
 ```bibtex
-
 @inproceedings{wu2024frequencyguidancemattersskeletal,
   author = {Wenhan Wu and Ce Zheng and Zihao Yang and Chen Chen and Srijan Das and Aidong Lu},
   title = {Frequency Guidance Matters: Skeletal Action Recognition by Frequency-Aware Mixed Transformer},
@@ -101,12 +79,5 @@ If you find this code useful for your research, please consider citing the follo
 ```
 
 ## Acknowledgements
-The code is mainly based on [Skeleton-MixFormer](https://github.com/ElricXin/Skeleton-MixFormer).
-The data processing is borrowed from [CTR-GCN](https://github.com/Uason-Chen/CTR-GCN).
-Thanks for their amazing work!  
 
-## Contact
-For any questions, feel free to create a new issue or contact:
-```
-Wenhan Wu: wwu25@uncc.edu
-```
+Built on [FreqMixFormer](https://github.com/wenhanwu95/FreqMixFormer), [Skeleton-MixFormer](https://github.com/ElricXin/Skeleton-MixFormer), and [CTR-GCN](https://github.com/Uason-Chen/CTR-GCN) data tooling.
